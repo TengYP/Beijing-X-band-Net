@@ -1,0 +1,91 @@
+function CommonBlock=Read_CommonBlock(fid)
+%%
+%GENERIC_HEADER
+    CommonBlock.GenericHeader.MagicWord=fread(fid,1,'int32');
+    CommonBlock.GenericHeader.MajorVersion=fread(fid,1,'int16');
+    CommonBlock.GenericHeader.MinorVersion=fread(fid,1,'int16');
+    CommonBlock.GenericHeader.GenericType=fread(fid,1,'int32');%1-基数据文件；2-气象产品
+    CommonBlock.GenericHeader.ProductType=fread(fid,1,'int32');
+    CommonBlock.GenericHeader.Reserved=fread(fid,16,'char');
+%%
+%SITE_CONFIGURATION
+    CommonBlock.SiteConfiguration.SiteCode=char(fread(fid,8,'char')');%站名
+    CommonBlock.SiteConfiguration.SiteName=char(fread(fid,32,'char')');%站号
+    CommonBlock.SiteConfiguration.Latitude=fread(fid,1,'float32');%纬度
+    CommonBlock.SiteConfiguration.Longitude=fread(fid,1,'float32');%经度
+    CommonBlock.SiteConfiguration.Height=fread(fid,1,'int32');%天线海拔高度
+    CommonBlock.SiteConfiguration.Ground=fread(fid,1,'int32');%塔楼海拔高度
+    CommonBlock.SiteConfiguration.Frequency=fread(fid,1,'float32');%MHz
+    CommonBlock.SiteConfiguration.BeamWidthHori=fread(fid,1,'float32');%水平波束宽度
+    CommonBlock.SiteConfiguration.BeamWidthVert=fread(fid,1,'float32');%垂直波束宽度
+    CommonBlock.SiteConfiguration.RDAVersion=fread(fid,1,'int32');
+    CommonBlock.SiteConfiguration.RadarType=fread(fid,1,'int16');
+    CommonBlock.SiteConfiguration.Reserved=fread(fid,54,'char');
+%%
+%TASK_CONFIGURATION
+    CommonBlock.TaskConfiguration.TaskName=char(fread(fid,32,'char')');
+    CommonBlock.TaskConfiguration.TaskDescription=char(fread(fid,128,'char')');
+    CommonBlock.TaskConfiguration.PolarizationType=fread(fid,1,'int32');%极化方式：1-水平极化;2-垂直极化;3-水平垂直同时;4-水平同时交替
+    CommonBlock.TaskConfiguration.ScanType=fread(fid,1,'int32');%扫描任务类型：0-体扫;1-单层PPT;2-单层RHI;3-单层扇扫;4-扇体扫;5-多层RHI;6-手工扫描
+    CommonBlock.TaskConfiguration.PulseWidth=fread(fid,1,'int32');%发生脉冲宽度,纳秒
+    CommonBlock.TaskConfiguration.VolumeStartTime=fread(fid,1,'int32');
+    CommonBlock.TaskConfiguration.CutNumber=fread(fid,1,'int32');%扫描层数
+    CommonBlock.TaskConfiguration.HorizontalNoise=fread(fid,1,'float32');
+    CommonBlock.TaskConfiguration.VerticalNoise=fread(fid,1,'float32');
+    CommonBlock.TaskConfiguration.HorizontalCalibration=fread(fid,1,'float32');
+    CommonBlock.TaskConfiguration.VerticalCalibration=fread(fid,1,'float32');
+    CommonBlock.TaskConfiguration.HorizontalNoiseTemperature=fread(fid,1,'float32');
+    CommonBlock.TaskConfiguration.VerticalNoiseTemperature=fread(fid,1,'float32');
+    CommonBlock.TaskConfiguration.ZdrCalibration=fread(fid,1,'float32');
+    CommonBlock.TaskConfiguration.PhaseCalibration=fread(fid,1,'float32');
+    CommonBlock.TaskConfiguration.LDRCalibration=fread(fid,1,'float32');
+    CommonBlock.TaskConfiguration.Reserved=fread(fid,40,'char');
+%%
+%CUT_CONFIGURATION
+    for i=1:CommonBlock.TaskConfiguration.CutNumber
+        CommonBlock.CutConfiguration(i).ProcessMode=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).WaveForm=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).PRF1=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).PRF2=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).DealiasingMode=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).Azimuth=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).Elevation=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).StartAngle=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).EndAngle=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).AngularResolution=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).ScanSpeed=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).LogResolution=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).DopplerResolution=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).MaximumRange1=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).MaximumRange2=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).StartRange=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).Sample1=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).Sample2=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).PhaseMode=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).AtmosphericLoss=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).NyquistSpeed=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).MomentsMask=fread(fid,1,'int64');
+        CommonBlock.CutConfiguration(i).MomentsSizeMask=fread(fid,1,'int64');
+        CommonBlock.CutConfiguration(i).MiscFilterMask=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).SQIThreshold=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).SIGThreshold=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).CSRThreshold=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).LOGThreshold=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).CPAThreshold=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).PMIThreshold=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).DPLOGThreshold=fread(fid,1,'float32');
+        CommonBlock.CutConfiguration(i).ThresholdsR=fread(fid,4,'char');
+        CommonBlock.CutConfiguration(i).dBTMask=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).dBZMask=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).VelocityMask=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).SpectrumWidthMask=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).DPMask=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).MaskReserved=fread(fid,12,'char');
+        CommonBlock.CutConfiguration(i).ScanSync=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).Direction=fread(fid,1,'int32');
+        CommonBlock.CutConfiguration(i).GroundClutterClassifierType=fread(fid,1,'int16');
+        CommonBlock.CutConfiguration(i).GroundClutterFilterType=fread(fid,1,'int16');
+        CommonBlock.CutConfiguration(i).GroundClutterFilterNotchWidth=fread(fid,1,'int16');
+        CommonBlock.CutConfiguration(i).GroundClutterFilterWindow=fread(fid,1,'int16');
+        CommonBlock.CutConfiguration(i).Reserved=fread(fid,72,'char');
+    end
