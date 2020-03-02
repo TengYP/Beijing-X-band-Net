@@ -1,4 +1,3 @@
-%X-bandÀ×´ïÆ´½Ó
 clc
 clear all
 close all
@@ -14,12 +13,6 @@ DirFile{1}=dir(fullfile(folder_name{1},'*.bin'));
 for i=2:6
     DirFile{i}=dir(fullfile(folder_name{i},'*.AR2'));
 end
-% % % % % for i=335:length(DirFile{1})
-% % % % %     fid=fopen(fullfile(folder_name{1},DirFile{1}(i).name),'rb');
-% % % % %     [fRef,~,~]=getRadarData(fid);fRef(fRef==-999)=NaN;fRef(fRef==999)=NaN;
-% % % % % 	fclose(fid);
-% % % % %     save([folder_name{1},'\',DirFile{1}(i).name(1:end-3),'mat'],'fRef')
-% % % % % end
 NetX=zeros(5,801,801);NetY=zeros(5,801,801);
 for i=1:5
     switch i
@@ -36,9 +29,6 @@ for i=1:5
     end
     [NetX(i,1:801,1:801),NetY(i,1:801,1:801)]=meshgrid(W:((E-W)/800):E,N:((S-N)/800):S);
 end
-% % % % % Xin=reshape(NetX,1,size(NetX,1)*size(NetX,2)*size(NetX,3));
-% % % % % Yin=reshape(NetY,1,size(NetY,1)*size(NetY,2)*size(NetY,3));
-
 for mm=6:9%3:9
     for dd=1:31%1:31
         if (mm==4||mm==6||mm==9)&&dd==31
@@ -46,7 +36,6 @@ for mm=6:9%3:9
         end
         for hh=12:12%0:3:21
             str=['2018',num2str(mm,'%02d'),num2str(dd,'%02d'),'.',num2str(hh,'%02d'),'000'];
-            % % % % %             load(['I:\2018\BJX_03h\Z_mat\',str,'.mat'])
             CAPPI_DBZ=NaN.*ones(5,801,801);
             CAPPI_CC=NaN.*ones(5,801,801);
             CAPPI_ZDR=NaN.*ones(5,801,801);
@@ -56,7 +45,6 @@ for mm=6:9%3:9
             Data_DBZ_tmp=NaN.*ones(5,2001,2001);
             Data_CC_tmp=NaN.*ones(5,2001,2001);
             Data_ZDR_tmp=NaN.*ones(5,2001,2001);
-            
             row=zeros(5,1);radarLon=zeros(5,1);radarLat=zeros(5,1);
             for i=2:4:6
                 DBZ=NaN.*ones(9,801,801);
@@ -98,18 +86,8 @@ for mm=6:9%3:9
                         Data_ZDR_tmp((i-1),1:2001,1:2001)=X_Net_ZDR(X,Y);
                         break
                     end
-                end
-                
+                end  
             end
-%             Zin_DBZ=reshape(CAPPI_DBZ,1,size(CAPPI_DBZ,1)*size(CAPPI_DBZ,2)*size(CAPPI_DBZ,3));
-%             Zin_WID=reshape(CAPPI_WID,1,size(CAPPI_WID,1)*size(CAPPI_WID,2)*size(CAPPI_WID,3));
-%             Zin_ZDR=reshape(CAPPI_ZDR,1,size(CAPPI_ZDR,1)*size(CAPPI_ZDR,2)*size(CAPPI_ZDR,3));
-%             Xin=reshape(NetX,1,size(NetX,1)*size(NetX,2)*size(NetX,3));
-%             Yin=reshape(NetY,1,size(NetY,1)*size(NetY,2)*size(NetY,3));
-%             X_Net_DBZ=scatteredInterpolant(Xin(~isnan(Zin_DBZ))',Yin(~isnan(Zin_DBZ))',Zin_DBZ(~isnan(Zin_DBZ))','natural','none');
-%             X_Net_WID=scatteredInterpolant(Xin(~isnan(Zin_WID))',Yin(~isnan(Zin_WID))',Zin_WID(~isnan(Zin_WID))','natural','none');
-%             X_Net_ZDR=scatteredInterpolant(Xin(~isnan(Zin_ZDR))',Yin(~isnan(Zin_ZDR))',Zin_ZDR(~isnan(Zin_ZDR))','natural','none');
-%             [X,Y]=meshgrid(115.5:2/2000:117.5,41:-1.5/2000:39.5);
             Data_DBZ(1:2001,1:2001)=(nanmax(Data_DBZ_tmp,[],1));
             Data_CC(1:2001,1:2001)=(nanmax(Data_CC_tmp,[],1));
             Data_ZDR(1:2001,1:2001)=(nanmax(Data_ZDR_tmp,[],1));
@@ -123,7 +101,6 @@ for mm=6:9%3:9
             set(gcf,'outerposition',[1 1 1920 720])
             saveas(gcf,['I:\2018\BJX_03h\Z_jpg_20\',str,'0.jpg'])
             close(gcf)
-            %             save(['I:\2018\BJX_03h\Z_mat\',str,'.mat'],'CAPPI','CAPPI_ZDR','Data','Data_ZDR','NetRadar','NetRadar_ZDR','radarLon','radarLat')
         end
     end
 end
